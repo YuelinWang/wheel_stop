@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <title>计算器</title>
+
+    <meta charset="utf-8" />
+
+    <style type="text/css">
+
+      .panel {
+
+        border: 4px solid #ddd;
+
+        width: 192px;
+
+        margin: 100px auto;
+
+        /*border-radius: 6px;*/
+
+      }
+
+      .panel p, .panel input {
+
+        font-family: "微软雅黑";
+
+        font-size: 20px;
+
+        margin: 4px;
+
+        float: left;
+
+        /*border-radius: 4px;*/
+
+      }
+
+      .panel p {
+
+        width: 122px;
+
+        height: 26px;
+
+        border: 1px solid #ddd;
+
+        padding: 6px;
+
+        overflow: hidden;
+
+      }
+
+      .panel input {
+
+        width: 40px;
+
+        height: 40px;
+
+        border:1px solid #ddd;
+
+       cursor: pointer;
+       outline: none;
+   
+      }
+
+      .panel input:hover {
+        color:coral;
+        transition: 0.1s;
+        transform: scale(1.1);
+      }
+
+    </style>
+
+ 
+
+  </head>
+
+  <body>
+
+    <div class="panel" id="jsq">
+
+      <div>
+
+        <p id="screen"></p>
+
+        <input type="button" value="C">
+
+        <div style="clear:both"></div>
+
+      </div>
+
+      <div>
+
+        <input type="button" class="num" value="7">
+
+        <input type="button" class="num" value="8">
+
+        <input type="button" class="num" value="9">
+
+
+        <input type="button" class="math" value="/">
+
+        
+
+        <input type="button" class="num" value="4">
+
+        <input type="button" class="num" value="5">
+
+        <input type="button" class="num" value="6">
+
+        <input type="button" class="math" value="*">
+
+        
+
+        <input type="button" class="num" value="1">
+
+        <input type="button" class="num" value="2">
+
+        <input type="button" class="num" value="3">
+
+        <input type="button" class="math" value="-">
+
+        
+
+        <input type="button" class="num" value="0">
+
+        <input type="button" class="point" value=".">
+
+        <input type="button" class="equal"value="=">
+
+        <input type="button" class="math" value="+">
+
+        
+
+        <div style="clear:both"></div>
+
+      </div>
+
+    </div>    
+    <script>
+        const p   = document.getElementById('screen'),
+              clear = document.getElementsByTagName('input')[0],
+              btns = document.getElementsByClassName('num'),
+         
+              point =document.getElementsByTagName('point')[0],
+              math = document.getElementsByClassName('math'),
+              equal =document.getElementsByClassName('equal')[0];
+              console.log(math)
+        let arr =[],
+            num1 ='',
+            num2 ='',
+            sym = null;
+
+
+
+          clear.onclick =function (){
+              p.innerText =''
+              arr =[],
+              num1 ='',
+              num2 ='',
+              sym = null;
+          }
+
+          for(let i =0;i<btns.length;i++){
+              btns[i].onclick =function(){
+          if(sym){
+            p.innerText=  num2 += this.value 
+   
+          }else{
+            p.innerText=  num1 += this.value
+          
+          } 
+        }
+        }
+
+
+        
+        // 1 + 2 - 3 
+            for(let i =0;i<math.length;i++){
+                math[i].onclick =function(){
+                  let matnbtns =math[i].value
+              if(sym) {
+                    arr.push(num2)
+                    num2 = ''
+                    //第二次输入符号
+              }else{
+                    arr.push(num1)
+                   num1 = ''
+                    //第一次输入符号
+              }
+              // 将sym 赋值。
+              sym = this.innerText+matnbtns
+              arr.push(sym)
+              console.log(sym)
+            }
+            }
+            
+
+
+
+            equal.onclick =function(){
+              arr.push(num2)   //数组里面加 'num2'
+              let res =js(arr)  // 加入计算   
+              console.log(res)
+              p.innerText =res  // 输出
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // let arr = [5,'/',0.4,'*',3,'+',3,'-',1,'*',2]
+
+        function js(arr){
+
+          let arr1 =arr.filter (function(a,b,c){    // 第一次判断
+                return  a==='*' || a==='/'      // 判断是否 a为 / 或 *  不是除就是乘  
+          })                  
+          let arr2 =arr.filter (function(a,b,c){    // 第二次判断
+                return  a==='+' || a==='-'      // 判断是否 a为 + 或 -  不是加就是-  
+          })                  
+
+            // let arr1 =arr.filter( a=> a==='*'||a ==='/')
+            // let arr2 =arr.filter( a=> a==='+'||a ==='-')
+
+
+            while (arr.length !==1){   //  如果 arr的长度不等于 1 就
+                let s = arr1.shift() || arr2.shift()   //一定理解 ！！
+                let idx = arr.indexOf(s)        // 获得arr的 符号下标
+                let firsta = arr[idx - 1 ]   // 通过 idx 取得每次 符号前面的 数字 ，必须是加arr
+                let firstb = arr[idx + 1 ]
+                let base = fn1(firsta,firstb)         // 算出  第一个数字 和 第二个数字 需要的  b =》 精度。
+             
+            let res = fn(firsta,firstb,s,base)    
+            arr.splice(idx-1,3,res)
+   
+          }
+
+          return arr[0]   // 为什么为  【0】  因为  arr 不加下标就是数组。  
+        }          
+   
+        
+
+
+          // 获取 b 精度
+
+          function fn1(a,b){
+            let  isa = Number.isInteger(a*1)
+            let  isb = Number.isInteger (b*1)
+            if(isa && isb ){
+              return 1 
+            }
+            let alast = String(a).length -2 ;
+            let blast = String(b).length -2 ;
+
+            let alen = alast - (isa? alast : 0)  // isa 是不是整数。 是就-自己= 0  ，不是就-0 = 自己。
+            let blen = blast - (isb? blast : 0)
+            return  10**(alen>=blen? alen: blen)
+              // if(isa||isb){
+              //      let ablen = (isa.length-2) - (isb.length-2)
+              // }
+
+            }
+          console.log(fn1(0.01,0.01))
+
+
+      /*
+        x . y 是 操作数
+        s  为运算符号 
+        b  解决精度的进制    1+1 =2 
+                            0.1 x 10 + 0.2 x 10 =  2 /10^2
+                                                      b
+      */
+        function fn(x,y,s,b){
+            switch(s){
+              case '*':
+                  return ((x*b).toFixed(0) * (y*b).toFixed(0)) / b**2    // 解决精度丢失
+                break;
+              case '/':
+                  return ((x*b).toFixed(0) / (y*b).toFixed(0))    // toFixed(0) 保留小数点后面的 0位     
+                break;
+              case '+':
+                  return ((x*b)+ (y*b)) /b
+                break;
+              case '-':
+                  return ((x*b) - (y*b)) /b
+                break;
+            }
+        }
+            console.log(fn(0.02,0.22,'*',100))
+      </script>
+  </body>
+
+</html>

@@ -1,0 +1,46 @@
+/*
+
+*/
+*{
+	margin: 0;
+	padding: 0;
+}
+.back_top{
+	background: url(../img/background_all.png);
+	height: 500px;
+	width: 100%;
+	background-size: cover;
+	background-position: center;
+}
+.w_m_w{
+	position: absolute;
+	top: 25%;
+	left: 75%;
+	transform: translate(-50%,-50%);
+	text-align: center;
+	width: 370px;
+}
+#head_all{
+	background: #ecf0f1;
+}
+#my_type{
+	width: 1055px;
+	height: 200px;
+	margin: auto;
+	background: #bdc3c7;
+}
+
+#my_type .bg{
+	width: 125px;
+	height: 165px;
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-bottom: 25px;
+	padding-top: 10px;
+	border-right: 1px dashed black;
+	text-align: center;
+	float: left;
+}
+#my_type .bg.last{
+	border: 0;
+}
